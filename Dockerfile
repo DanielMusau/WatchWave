@@ -1,5 +1,5 @@
 # Use the official Elixir image with Alpine Linux
-FROM hexpm/elixir:1.13.4-erlang-24.1.2-alpine-3.14.2
+FROM hexpm/elixir:1.14.2-erlang-24.1.2-alpine-3.14.2
 
 # Set the environment variables
 ENV MIX_ENV=prod

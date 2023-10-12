@@ -37,4 +37,4 @@ RUN mix release
 # EXPOSE <port>
 
 # Set the entrypoint command for the release
-CMD ["./_build/prod/rel/series_tracker_app/bin/series_tracker_app", "start"]
+CMD ["./_build/prod/rel/series_tracker_api/bin/series_tracker_api", "start"]

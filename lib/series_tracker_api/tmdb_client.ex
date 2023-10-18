@@ -1,7 +1,7 @@
 defmodule SeriesTrackerApi.TMDbClient do
   def get(path, query_params \\ %{}, options \\ []) do
     base_url = SeriesTrackerApi.TMDbConfig.api_base_url()
-    api_key = SeriesTrackerApi.TMDbConfig.api_key()
+    api_key = System.get_env("TMDB_API_KEY")
 
     headers = [
       {"accept", "application/json"},

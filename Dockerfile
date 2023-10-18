@@ -28,7 +28,7 @@ RUN mix compile
 RUN mix phx.digest
 
 # Run database migrations (if applicable)
-# RUN mix ecto.migrate
+RUN mix ecto.migrate
 
 # Build the release
 RUN mix release

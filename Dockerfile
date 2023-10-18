@@ -26,7 +26,7 @@ RUN mix compile
 
 # Run database migrations and seed data (if applicable)
 # Note: You can replace "mix ecto.setup" with "mix ecto.migrate" if you only want to migrate
-RUN mix ecto.setup
+RUN mix ecto.migrate
 
 # Build the static assets and generate cache manifest
 RUN mix phx.digest

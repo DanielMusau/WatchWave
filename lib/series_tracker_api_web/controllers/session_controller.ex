@@ -1,4 +1,4 @@
-defmodule SeriesTrackerApi.SessionController do
+defmodule SeriesTrackerApiWeb.SessionController do
   use SeriesTrackerApiWeb, :controller
 
   alias SeriesTrackerApi.{Users, Users.User, Users.Guardian}
@@ -16,11 +16,11 @@ defmodule SeriesTrackerApi.SessionController do
 
   def login(conn, %{"user" => %{"email" => email, "password" => password_hash}}) do
     case Users.authenticate_user(email, password_hash) do
-      {:ok, _} ->
+      {:ok, _user} ->
         conn
-        |> put_status(:ok)
+        |> put_status(200)
         |> put_resp_header("content-type", "application/json")
-        |> json_response(%{message: "Login successful"})
+        |> json_response(%{message: "Welcome Back!"})
 
       {:error, _} ->
         conn
@@ -42,21 +42,21 @@ defmodule SeriesTrackerApi.SessionController do
     |> redirect(to: "/login")   #and the arguments specified in the Guardian.Plug.sign_out()
   end                           #docs are not applicable here
 
-  defp login_reply({:ok, user}, conn) do
-    conn
-    |> fetch_session()
-    |> fetch_flash()
-    |> put_flash(:info, "Welcome back!")
-    |> Guardian.Plug.sign_in(user)
-    |> redirect(to: "/protected")
-  end
+  # defp login_reply({:ok, user}, conn) do
+  #   conn
+  #   |> fetch_session()
+  #   |> fetch_flash()
+  #   |> put_flash(:info, "Welcome back!")
+  #   |> Guardian.Plug.sign_in(user)
+  #   |> redirect(to: "/protected")
+  # end
 
-  defp login_reply({:error, reason}, conn) do
-    conn
-    |> fetch_session()
-    |> fetch_flash()
-    |> put_flash(:error, to_string(reason))
-    |> new(%{})
-  end
+  # defp login_reply({:error, reason}, conn) do
+  #   conn
+  #   |> fetch_session()
+  #   |> fetch_flash()
+  #   |> put_flash(:error, to_string(reason))
+  #   |> new(%{})
+  # end
 
 end

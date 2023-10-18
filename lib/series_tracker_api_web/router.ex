@@ -9,9 +9,19 @@ defmodule SeriesTrackerApiWeb.Router do
     pipe_through :api
 
     resources "/users", UserController
+    resources "/watched_items", WatchedItemController, except: [:new, :edit]
+
+    get "/search_series", SeriesController, :search_series
+    get "/search_movie", SeriesController, :search_movie
+    get "/daily_trending_movies", SeriesController, :get_daily_trending_movies
+    get "/weekly_trending_movies", SeriesController, :get_weekly_trending_movies
+    get "/daily_trending_tv", SeriesController, :get_daily_trending_tv
+    get "/weekly_trending_tv", SeriesController, :get_weekly_trending_tv
+    get "/trending_tv", SeriesController, :get_trending_tv
+    get "/upcoming_movies", SeriesController, :get_upcoming_movies
 
     post "/login", SessionController, :login
-    delete "/logout", SessionController, :logout
+    post "/logout", SessionController, :logout
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

@@ -3,12 +3,15 @@ defmodule SeriesTrackerApi.Users.User do
   import Ecto.Changeset
   alias Argon2
 
+  alias SeriesTrackerApi.WatchedItems.WatchedItem
+
   schema "users" do
     field :email, :string
     field :name, :string
     field :password, :string, virtual: true
     field :password_hash, :string
 
+    has_many :watched_items, WatchedItem
     timestamps()
   end
 

@@ -10,10 +10,9 @@ import Config
 config :series_tracker_api,
   ecto_repos: [SeriesTrackerApi.Repo]
 
-# Configure guardian
-config :series_tracker_api, SeriesTrackerApi.Users.Guardian,
-  issuer: "auth_me",
-  secret_key: ""
+# Configure TMDb API
+config :series_tracker_api, SeriesTrackerApi.TMDbConfig,
+  api_key: System.get_env("TMDB_API_KEY")
 
 
 # Configures the endpoint

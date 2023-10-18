@@ -10,6 +10,8 @@ defmodule SeriesTrackerApi.Application do
     children = [
       # Start the Telemetry supervisor
       SeriesTrackerApiWeb.Telemetry,
+      # # Start Guardian
+      # Guardian,
       # Start the Ecto repository
       SeriesTrackerApi.Repo,
       # Start the PubSub system

@@ -12,7 +12,8 @@ defmodule SeriesTrackerApiWeb.WatchedItemController do
   end
 
   def create(conn, %{"watched_item" => watched_item_params}) do
-    with {:ok, %WatchedItem{} = watched_item} <- WatchedItems.create_watched_item(watched_item_params) do
+    with {:ok, %WatchedItem{} = watched_item} <-
+           WatchedItems.create_watched_item(watched_item_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/watched_items/#{watched_item}")
@@ -28,7 +29,8 @@ defmodule SeriesTrackerApiWeb.WatchedItemController do
   def update(conn, %{"id" => id, "watched_item" => watched_item_params}) do
     watched_item = WatchedItems.get_watched_item!(id)
 
-    with {:ok, %WatchedItem{} = watched_item} <- WatchedItems.update_watched_item(watched_item, watched_item_params) do
+    with {:ok, %WatchedItem{} = watched_item} <-
+           WatchedItems.update_watched_item(watched_item, watched_item_params) do
       render(conn, :show, watched_item: watched_item)
     end
   end

@@ -36,14 +36,19 @@ defmodule SeriesTrackerApi.WatchedItemsTest do
       watched_item = watched_item_fixture()
       update_attrs = %{series_name: "some updated series_name", user_id: 43}
 
-      assert {:ok, %WatchedItem{} = watched_item} = WatchedItems.update_watched_item(watched_item, update_attrs)
+      assert {:ok, %WatchedItem{} = watched_item} =
+               WatchedItems.update_watched_item(watched_item, update_attrs)
+
       assert watched_item.series_name == "some updated series_name"
       assert watched_item.user_id == 43
     end
 
     test "update_watched_item/2 with invalid data returns error changeset" do
       watched_item = watched_item_fixture()
-      assert {:error, %Ecto.Changeset{}} = WatchedItems.update_watched_item(watched_item, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               WatchedItems.update_watched_item(watched_item, @invalid_attrs)
+
       assert watched_item == WatchedItems.get_watched_item!(watched_item.id)
     end
 

@@ -50,7 +50,7 @@ defmodule SeriesTrackerApi.MixProject do
       {:recase, "~> 0.5"},
       {:guardian, "~> 2.0"},
       {:httpoison, "~> 1.7"},
-      {:argon2_elixir, "~> 3.1"},
+      {:argon2_elixir, "~> 3.1"}
     ]
   end
 

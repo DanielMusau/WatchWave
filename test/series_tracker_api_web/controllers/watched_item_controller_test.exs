@@ -49,7 +49,10 @@ defmodule SeriesTrackerApiWeb.WatchedItemControllerTest do
   describe "update watched_item" do
     setup [:create_watched_item]
 
-    test "renders watched_item when data is valid", %{conn: conn, watched_item: %WatchedItem{id: id} = watched_item} do
+    test "renders watched_item when data is valid", %{
+      conn: conn,
+      watched_item: %WatchedItem{id: id} = watched_item
+    } do
       conn = put(conn, ~p"/api/watched_items/#{watched_item}", watched_item: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 

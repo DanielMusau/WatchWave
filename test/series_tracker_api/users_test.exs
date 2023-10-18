@@ -35,7 +35,12 @@ defmodule SeriesTrackerApi.UsersTest do
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
-      update_attrs = %{email: "some updated email", password: "some updated password", username: "some updated username"}
+
+      update_attrs = %{
+        email: "some updated email",
+        password: "some updated password",
+        username: "some updated username"
+      }
 
       assert {:ok, %User{} = user} = Users.update_user(user, update_attrs)
       assert user.email == "some updated email"

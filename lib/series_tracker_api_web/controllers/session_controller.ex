@@ -7,6 +7,7 @@ defmodule SeriesTrackerApiWeb.SessionController do
   def new(conn, _) do
     _changeset = Users.change_user(%User{})
     maybe_user = Guardian.Plug.current_resource(conn)
+
     if maybe_user do
       redirect(conn, to: "/protected")
     else
@@ -38,9 +39,13 @@ defmodule SeriesTrackerApiWeb.SessionController do
 
   def logout(conn, _) do
     conn
-    |> Guardian.Plug.sign_out() #This module's full name is Auth.UserManager.Guardian.Plug,
-    |> redirect(to: "/login")   #and the arguments specified in the Guardian.Plug.sign_out()
-  end                           #docs are not applicable here
+    # This module's full name is Auth.UserManager.Guardian.Plug,
+    |> Guardian.Plug.sign_out()
+    # and the arguments specified in the Guardian.Plug.sign_out()
+    |> redirect(to: "/login")
+  end
+
+  # docs are not applicable here
 
   # defp login_reply({:ok, user}, conn) do
   #   conn
@@ -58,5 +63,4 @@ defmodule SeriesTrackerApiWeb.SessionController do
   #   |> put_flash(:error, to_string(reason))
   #   |> new(%{})
   # end
-
 end

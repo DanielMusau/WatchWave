@@ -1,10 +1,7 @@
 defmodule SeriesTrackerApi.TMDbClient do
-  import HTTPoison.Base
-
   def get(path, query_params \\ %{}, options \\ []) do
     base_url = SeriesTrackerApi.TMDbConfig.api_base_url()
     api_key = SeriesTrackerApi.TMDbConfig.api_key()
-
 
     headers = [
       {"accept", "application/json"},
@@ -22,6 +19,7 @@ defmodule SeriesTrackerApi.TMDbClient do
         case Jason.decode(body) do
           {:ok, %{"results" => results}} ->
             {:ok, results}
+
           _ ->
             {:error, "TMDb API response format is unexpected: #{body}"}
         end

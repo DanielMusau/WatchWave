@@ -11,9 +11,7 @@ config :series_tracker_api,
   ecto_repos: [SeriesTrackerApi.Repo]
 
 # Configure TMDb API
-config :series_tracker_api, SeriesTrackerApi.TMDbConfig,
-  api_key: System.get_env("TMDB_API_KEY")
-
+config :series_tracker_api, SeriesTrackerApi.TMDbConfig, api_key: System.get_env("TMDB_API_KEY")
 
 # Configures the endpoint
 config :series_tracker_api, SeriesTrackerApiWeb.Endpoint,
@@ -36,7 +34,6 @@ config :series_tracker_api, SeriesTrackerApiWeb.Endpoint,
     ],
     allow_credentials: true
   ]
-
 
 # Configures the mailer
 #

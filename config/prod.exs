@@ -20,6 +20,3 @@ config :logger, level: :info
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
-
-# Configure TMDb API
-config :series_tracker_api, SeriesTrackerApi.TMDbConfig, api_key: System.get_env("TMDB_API_KEY")

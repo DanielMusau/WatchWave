@@ -1,0 +1,5 @@
+*/_pycache__/
+.env
+.flaskenv
+*.pyc
+requirements.txt

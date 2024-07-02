@@ -5,6 +5,7 @@ from config import Config
 
 db = SQLAlchemy()
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -15,6 +16,7 @@ def create_app():
     from .models import User, Account
 
     from .routes import main as main_blueprint
+
     app.register_blueprint(main_blueprint)
 
     with app.app_context():

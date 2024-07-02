@@ -1,4 +1,5 @@
 """This module is the entry point of the application."""
+
 from app import create_app, db
 from flask_migrate import Migrate
 

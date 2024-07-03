@@ -4,8 +4,36 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import User, Account
 from sqlalchemy.sql import func
 from app import db
+import jwt
+from datetime import datetime, timedelta
+from functools import wraps
+from config import Config
 
 main = Blueprint("main", __name__)
+
+
+# decorator for verifying the JWT
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        # jwt is passed in the request header
+        if "x-access-token" in request.headers:
+            token = request.headers["x-access-token"]
+        # return 401 if token is not passed
+        if not token:
+            return jsonify({"message": "Unauthorized"}), 401
+
+        try:
+            # decoding the payload to fetch the stored details
+            data = jwt.decode(token, Config.SECRET_KEY)
+            current_user = User.query.filter_by(public_id=data["public_id"]).first()
+        except:
+            return jsonify({"message": "Unauthorized"}), 401
+        # returns the current logged in users context to the routes
+        return f(current_user, *args, **kwargs)
+
+    return decorated
 
 
 @main.route("/api/signup", methods=["POST"])
@@ -67,7 +95,17 @@ def login():
     user = User.query.filter_by(email=email).first()
 
     if user and check_password_hash(user.password_hash, password):
+        # generate a new JWT token with the user id
+        token = jwt.encode(
+            {"public_id": user.id, "exp": datetime.utcnow() + timedelta(minutes=30)},
+            Config.SECRET_KEY,
+        )
         account = user.account
-        return jsonify(account.to_dict()), 200
+        return jsonify(
+            {
+                "token": token,
+                "account": account.to_dict(),
+            }
+        )
     else:
         return jsonify({"error": "Invalid credentials"}), 401

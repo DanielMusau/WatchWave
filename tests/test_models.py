@@ -5,10 +5,12 @@ from werkzeug.security import generate_password_hash
 from config import TestingConfig
 from sqlalchemy.sql import func
 
+
 class ModelsTestCase(unittest.TestCase):
     """
     This class represents the test cases for the database models.
     """
+
     def setUp(self):
         """
         This method sets up the test client and the test database.
@@ -33,21 +35,21 @@ class ModelsTestCase(unittest.TestCase):
         This method tests the creation of a user.
         """
         with self.app.app_context():
-            password_hash = generate_password_hash('testpassword')
+            password_hash = generate_password_hash("testpassword")
             user = User(
-                username='testuser',
-                email='testuser@example.com',
+                username="testuser",
+                email="testuser@example.com",
                 password_hash=password_hash,
                 created_at=func.now(),
-                updated_at=func.now()
+                updated_at=func.now(),
             )
             db.session.add(user)
             db.session.commit()
 
-            retrieved_user = User.query.filter_by(email='testuser@example.com').first()
+            retrieved_user = User.query.filter_by(email="testuser@example.com").first()
             self.assertIsNotNone(retrieved_user)
-            self.assertEqual(retrieved_user.username, 'testuser')
-            self.assertEqual(retrieved_user.email, 'testuser@example.com')
+            self.assertEqual(retrieved_user.username, "testuser")
+            self.assertEqual(retrieved_user.email, "testuser@example.com")
             self.assertEqual(retrieved_user.password_hash, password_hash)
 
     def test_account_creation(self):
@@ -55,13 +57,13 @@ class ModelsTestCase(unittest.TestCase):
         This method tests the creation of an account.
         """
         with self.app.app_context():
-            password_hash = generate_password_hash('testpassword')
+            password_hash = generate_password_hash("testpassword")
             user = User(
-                username='testuser',
-                email='testuser@example.com',
+                username="testuser",
+                email="testuser@example.com",
                 password_hash=password_hash,
                 created_at=func.now(),
-                updated_at=func.now()
+                updated_at=func.now(),
             )
             db.session.add(user)
             db.session.commit()
@@ -70,16 +72,18 @@ class ModelsTestCase(unittest.TestCase):
                 email=user.email,
                 user_id=user.id,
                 created_at=func.now(),
-                updated_at=func.now()
+                updated_at=func.now(),
             )
             db.session.add(account)
             db.session.commit()
 
-            retrieved_account = Account.query.filter_by(email='testuser@example.com').first()
+            retrieved_account = Account.query.filter_by(
+                email="testuser@example.com"
+            ).first()
             self.assertIsNotNone(retrieved_account)
             self.assertEqual(retrieved_account.user_id, user.id)
             self.assertEqual(retrieved_account.email, user.email)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

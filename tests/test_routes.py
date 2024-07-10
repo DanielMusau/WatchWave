@@ -5,10 +5,12 @@ from werkzeug.security import generate_password_hash
 from config import TestingConfig
 from sqlalchemy.sql import func
 
+
 class RoutesTestCase(unittest.TestCase):
     """
     This class represents the test cases for the routes.
     """
+
     def setUp(self):
         """
         This method sets up the test client and the test database.
@@ -32,28 +34,31 @@ class RoutesTestCase(unittest.TestCase):
         """
         This method tests the signup route.
         """
-        response = self.client().post('/api/signup', json={
-            'username': 'testuser',
-            'email': 'testuser@example.com',
-            'password': 'testpassword'
-        })
+        response = self.client().post(
+            "/api/signup",
+            json={
+                "username": "testuser",
+                "email": "testuser@example.com",
+                "password": "testpassword",
+            },
+        )
         data = response.get_json()
         self.assertEqual(response.status_code, 201)
-        self.assertIn('id', data)
-        self.assertEqual(data['email'], 'testuser@example.com')
+        self.assertIn("id", data)
+        self.assertEqual(data["email"], "testuser@example.com")
 
     def test_login(self):
         """
         This method tests the login route.
         """
         with self.app.app_context():
-            password_hash = generate_password_hash('testpassword')
+            password_hash = generate_password_hash("testpassword")
             user = User(
-                username='testuser',
-                email='testuser@example.com',
+                username="testuser",
+                email="testuser@example.com",
                 password_hash=password_hash,
                 created_at=func.now(),
-                updated_at=func.now()
+                updated_at=func.now(),
             )
             db.session.add(user)
             db.session.commit()
@@ -68,28 +73,29 @@ class RoutesTestCase(unittest.TestCase):
             db.session.add(new_account)
             db.session.commit()
 
-        response = self.client().post('/api/login', json={
-            'email': 'testuser@example.com',
-            'password': 'testpassword'
-        })
+        response = self.client().post(
+            "/api/login",
+            json={"email": "testuser@example.com", "password": "testpassword"},
+        )
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
-        self.assertIn('token', data)
-        self.assertIn('account', data)
-        self.assertEqual(data['account']['email'], 'testuser@example.com')
+        self.assertIn("token", data)
+        self.assertIn("account", data)
+        self.assertEqual(data["account"]["email"], "testuser@example.com")
 
     def test_login_invalid_data(self):
         """
         This method tests the login route with invalid data.
         """
-        response = self.client().post('/api/login', json={
-            'email': 'wrongemail@example.com',
-            'password': 'wrongpassword'
-        })
+        response = self.client().post(
+            "/api/login",
+            json={"email": "wrongemail@example.com", "password": "wrongpassword"},
+        )
         data = response.get_json()
         self.assertEqual(response.status_code, 401)
-        self.assertIn('error', data)
-        self.assertEqual(data['error'], 'Invalid credentials')
+        self.assertIn("error", data)
+        self.assertEqual(data["error"], "Invalid credentials")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

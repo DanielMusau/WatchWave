@@ -13,7 +13,7 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    from .models import User, Account
+    from .models import User, Account, MotionPictures, WatchList
 
     from .routes import main as main_blueprint
 

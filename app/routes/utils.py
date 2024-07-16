@@ -9,15 +9,18 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
-        if "x-access-token" in request.headers:
-            token = request.headers["x-access-token"]
+        if "Authorization" in request.headers:
+            auth_header = request.headers["Authorization"]
+            if auth_header.startswith("Bearer "):
+                token = auth_header.split(" ")[1]
+
         if not token:
             return jsonify({"message": "Unauthorized"}), 401
 
         try:
             data = jwt.decode(token, Config.SECRET_KEY, algorithms=["HS256"])
-            current_user = User.query.filter_by(public_id=data["public_id"]).first()
-        except:
+            current_user = User.query.filter_by(id=data["public_id"]).first()
+        except Exception as e:
             return jsonify({"message": "Unauthorized"}), 401
 
         return f(current_user, *args, **kwargs)

@@ -16,27 +16,22 @@ def signup():
         if "username" not in data or "email" not in data or "password" not in data:
             return jsonify({"error": "Invalid data"}), 400
 
-        username = data["username"]
-        email = data["email"]
         password = data["password"]
-        created_at = datetime.utcnow()
-        updated_at = datetime.utcnow()
-
         password_hash = generate_password_hash(password)
 
         new_user = User(
-            username=username,
-            email=email,
+            username=data["username"],
+            email=data["email"],
             password_hash=password_hash,
-            created_at=created_at,
-            updated_at=updated_at,
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
         )
 
         db.session.add(new_user)
         db.session.commit()
 
         new_account = Account(
-            email=email,
+            email=data["email"],
             user_id=new_user.id,
             created_at=new_user.created_at,
             updated_at=new_user.updated_at,
@@ -66,7 +61,7 @@ def login():
 
     if user and check_password_hash(user.password_hash, password):
         token = jwt.encode(
-            {"public_id": user.id, "exp": datetime.utcnow() + timedelta(minutes=30)},
+            {"public_id": user.id, "exp": datetime.now() + timedelta(minutes=30)},
             Config.SECRET_KEY,
             algorithm="HS256",
         )

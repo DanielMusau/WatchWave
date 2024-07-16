@@ -27,6 +27,7 @@ class Account(db.Model):
     )
 
     user = relationship("User", back_populates="account")
+    watch_list = relationship("WatchList", back_populates="account")
 
     __table_args__ = (UniqueConstraint("email", name="unique_email_accounts"),)
 

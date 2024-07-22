@@ -1,3 +1,12 @@
+"""
+Module for authentication routes.
+
+This module defines the routes for user authentication including signup and login.
+
+Blueprints:
+    auth: The blueprint for authentication routes.
+"""
+
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import User, Account
@@ -11,6 +20,15 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/api/signup", methods=["POST"])
 def signup():
+    """
+    Sign up a new user.
+
+    This route allows a new user to sign up by providing a username, email, and password.
+    It creates a new user and account in the database.
+
+    Returns:
+        tuple: A JSON response with the new account data and a status code.
+    """
     try:
         data = request.get_json()
         if "username" not in data or "email" not in data or "password" not in data:
@@ -49,6 +67,15 @@ def signup():
 
 @auth.route("/api/login", methods=["POST"])
 def login():
+    """
+    Log in a user.
+
+    This route allows a user to log in by providing an email and password.
+    It generates a JWT token if the credentials are valid.
+
+    Returns:
+        tuple: A JSON response with the JWT token and account data, or an error message.
+    """
     data = request.get_json()
 
     if "email" not in data or "password" not in data:

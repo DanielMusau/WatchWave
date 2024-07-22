@@ -1,3 +1,12 @@
+"""
+Module for motion pictures routes.
+
+This module defines the routes for adding to and updating the watchlist of motion pictures.
+
+Blueprints:
+    motion_pictures: The blueprint for motion pictures routes.
+"""
+
 from flask import Blueprint, request, jsonify
 from app.models import MotionPictures, WatchList, Account
 from app import db
@@ -10,6 +19,17 @@ motion_pictures = Blueprint("motion_pictures", __name__)
 @motion_pictures.route("/api/add-to-watchlist", methods=["POST"])
 @token_required
 def add_to_watchlist(current_user):
+    """
+    Add a new motion picture to the watchlist.
+
+    This route allows a user to add a new motion picture to their watchlist.
+
+    Args:
+        current_user (Account): The current authenticated user.
+
+    Returns:
+        tuple: A JSON response with the new watchlist entry data and a status code.
+    """
     try:
         data = request.get_json()
 
@@ -44,6 +64,18 @@ def add_to_watchlist(current_user):
 @motion_pictures.route("/api/update-watchlist/<int:watchlist_id>", methods=["PUT"])
 @token_required
 def update_watchlist(current_user, watchlist_id):
+    """
+    Update the watchlist entry.
+
+    This route allows a user to update the watched status of a watchlist entry.
+
+    Args:
+        current_user (Account): The current authenticated user.
+        watchlist_id (int): The ID of the watchlist entry to update.
+
+    Returns:
+        tuple: A JSON response with the updated watchlist entry data and a status code.
+    """
     try:
         data = request.get_json()
         watched = data["watched"]

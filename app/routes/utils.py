@@ -1,3 +1,12 @@
+"""
+Module for token authentication.
+
+This module provides a decorator function to ensure routes are accessed only by authenticated users.
+
+Functions:
+    token_required: A decorator to validate JWT tokens and authorize users.
+"""
+
 from flask import request, jsonify
 from functools import wraps
 import jwt
@@ -6,6 +15,19 @@ from config import Config
 
 
 def token_required(f):
+    """
+    Decorator to validate JWT tokens and authorize users.
+
+    This decorator ensures that the route can only be accessed by users with a valid JWT token.
+    It extracts the token from the request headers, decodes it, and fetches the current user.
+
+    Args:
+        f (function): The route function to be decorated.
+
+    Returns:
+        function: The decorated function that includes user authentication.
+    """
+
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None

@@ -2,4 +2,3 @@
 .env
 .flaskenv
 *.pyc
-requirements.txt

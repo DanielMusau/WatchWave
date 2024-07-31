@@ -15,30 +15,17 @@ from config import Config
 
 db = SQLAlchemy()
 
+app = Flask(__name__)
+app.config.from_object(Config)
 
-def create_app():
-    """
-    Create and configure the Flask application.
+db.init_app(app)
+migrate = Migrate(app, db)
 
-    This function creates the Flask app instance, configures it with settings from the Config class,
-    initializes the database and migration extensions, and registers the main blueprint.
+from .models import User, Account, MotionPictures, WatchList
 
-    Returns:
-        Flask: The configured Flask application instance.
-    """
-    app = Flask(__name__)
-    app.config.from_object(Config)
+from .routes import main as main_blueprint
 
-    db.init_app(app)
-    migrate = Migrate(app, db)
+app.register_blueprint(main_blueprint)
 
-    from .models import User, Account, MotionPictures, WatchList
-
-    from .routes import main as main_blueprint
-
-    app.register_blueprint(main_blueprint)
-
-    with app.app_context():
-        db.create_all()
-
-    return app
+with app.app_context():
+    db.create_all()

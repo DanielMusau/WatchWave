@@ -8,3 +8,4 @@ Werkzeug
 PyJWT
 python-dotenv
 gunicorn
+requests

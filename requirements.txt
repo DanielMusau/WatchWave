@@ -6,4 +6,4 @@ alembic
 psycopg2-binary
 Werkzeug
 PyJWT
-dotenv
+python-dotenv

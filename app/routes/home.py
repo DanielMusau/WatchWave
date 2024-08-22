@@ -7,7 +7,7 @@ Blueprints:
     home: The blueprint for home routes.
 """
 
-from flask import Blueprint
+from flask import Blueprint, request
 import os
 import requests
 from dotenv import load_dotenv
@@ -19,6 +19,7 @@ home = Blueprint("home", __name__)
 
 movie_url = "https://api.themoviedb.org/3/movie/popular"
 tv_url = "https://api.themoviedb.org/3/tv/popular"
+search_url = "https://api.themoviedb.org/3/search/multi"
 
 headers = {
     "accept": "application/json",
@@ -59,4 +60,23 @@ def latest_series(current_user):
         dict: A JSON response containing the latest popular TV series.
     """
     response = requests.get(tv_url, headers=headers)
+    return response.json()
+
+
+@home.route("/api/home/search", methods=["GET"])
+@token_required
+def search(current_user):
+    """
+    Search for movies and series.
+
+    This route searches for movies and series based on the query parameter.
+
+    Args:
+        current_user (dict): The current authenticated user.
+
+    Returns:
+        dict: A JSON response containing the search results.
+    """
+    query = request.args.get("query")
+    response = requests.get(f"{search_url}?query={query}", headers=headers)
     return response.json()

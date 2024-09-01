@@ -172,8 +172,10 @@ class WatchList(db.Model):
         """
         return {
             "id": self.id,
-            "account_id": self.account_id,
-            "motion_picture_id": self.motion_picture_id,
+            "account": self.account.to_dict() if self.account else None,
+            "motion_picture": (
+                self.motion_picture.to_dict() if self.motion_picture else None
+            ),
             "watched": self.watched,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),

@@ -98,3 +98,79 @@ def update_watchlist(current_user, watchlist_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+
+@motion_pictures.route("/api/watchlist", methods=["GET"])
+@token_required
+def get_watchlist(current_user):
+    """
+    Get the motion pictures in the watchlist for the current user.
+
+    This route allows a user to retrieve all motion pictures in their watchlist.
+
+    Args:
+        current_user (Account): The current authenticated user.
+
+    Returns:
+        tuple: A JSON response with the motion pictures data and a status code.
+    """
+    try:
+        # Query the WatchList table to get motion picture IDs for the current user
+        watchlist_entries = WatchList.query.filter_by(
+            account_id=current_user.account.id
+        ).all()
+
+        # Extract motion picture IDs from watchlist entries
+        motion_picture_ids = [entry.motion_picture_id for entry in watchlist_entries]
+
+        # Query the MotionPictures table to get details for the motion picture IDs
+        motion_pictures = MotionPictures.query.filter(
+            MotionPictures.id.in_(motion_picture_ids)
+        ).all()
+
+        # Convert motion pictures to a list of dictionaries
+        motion_picture_data = [
+            motion_picture.to_dict() for motion_picture in motion_pictures
+        ]
+
+        return jsonify(motion_picture_data), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@motion_pictures.route(
+    "/api/remove-from-watchlist/<int:motion_picture_id>", methods=["DELETE"]
+)
+@token_required
+def remove_from_watchlist(current_user, motion_picture_id):
+    """
+    Remove a motion picture from the watchlist.
+
+    This route allows a user to remove a motion picture from their watchlist.
+
+    Args:
+        current_user (Account): The current authenticated user.
+        motion_picture_id (int): The ID of the motion picture to remove from the watchlist.
+
+    Returns:
+        tuple: A JSON response confirming the removal and a status code.
+    """
+    try:
+        # Find the watchlist entry for the current user and the specified motion picture
+        watchlist_entry = WatchList.query.filter_by(
+            account_id=current_user.account.id, motion_picture_id=motion_picture_id
+        ).first()
+
+        if not watchlist_entry:
+            return jsonify({"error": "Watchlist entry not found"}), 404
+
+        # Remove the entry from the watchlist
+        db.session.delete(watchlist_entry)
+        db.session.commit()
+
+        return jsonify({"message": "Motion picture removed from watchlist"}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500

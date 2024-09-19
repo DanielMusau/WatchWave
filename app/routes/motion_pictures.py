@@ -38,6 +38,7 @@ def add_to_watchlist(current_user):
             external_id=data["external_id"],
             poster_path=data["poster_path"],
             type=data["type"],
+            overview=data["overview"],
             created_at=datetime.now(),
             updated_at=datetime.now(),
         )
@@ -57,6 +58,7 @@ def add_to_watchlist(current_user):
         return jsonify(new_watch_list.to_dict()), 201
 
     except Exception as e:
+        print(f"Error: {e}")
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 

@@ -48,6 +48,7 @@ class MotionPictures(db.Model):
     title = Column(String(255), nullable=False)
     external_id = Column(Integer, nullable=False)
     poster_path = Column(String(255), nullable=False)
+    overview = Column(String(255), nullable=True)
     type = Column(String(255), nullable=False)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(
@@ -58,7 +59,9 @@ class MotionPictures(db.Model):
 
     __table_args__ = (UniqueConstraint("external_id", name="unique_external_id"),)
 
-    def __init__(self, title, external_id, poster_path, type, created_at, updated_at):
+    def __init__(
+        self, title, external_id, poster_path, type, overview, created_at, updated_at
+    ):
         """
         Initialize a new MotionPictures instance.
 
@@ -70,11 +73,16 @@ class MotionPictures(db.Model):
             created_at (datetime): The creation timestamp.
             updated_at (datetime): The last update timestamp.
         """
+        max_overview_length = 255
+        if len(overview) > max_overview_length:
+            overview = overview[:max_overview_length]
+
         self.uuid = uuid.uuid4()
         self.title = title
         self.external_id = external_id
         self.poster_path = poster_path
         self.type = type
+        self.overview = overview
         self.created_at = created_at
         self.updated_at = updated_at
 
@@ -92,6 +100,7 @@ class MotionPictures(db.Model):
             "external_id": self.external_id,
             "poster_path": self.poster_path,
             "type": self.type,
+            "overview": self.overview,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
         }
